@@ -7,7 +7,8 @@ window.ECP = function() {
 
 	self.isReady = false;
 
-	
+
+
 	this.init = () => {
 		return new Promise((resolve, reject) => {
 			crypto.then(async () => {
@@ -22,7 +23,7 @@ window.ECP = function() {
 		});
 	};
 
-	
+
 	this.getCertificates = (location, storeName, mode) => {
 		const _location = location || crypto.CAPICOM_CURRENT_USER_STORE;
 		const _storeName = storeName || crypto.CAPICOM_MY_STORE;
@@ -47,7 +48,7 @@ window.ECP = function() {
 		});
 	};
 
-	
+
 	this.sign = (certificate, data) => {
 		if (data instanceof File) {
 			log('[Crypto] Signing File');
@@ -64,7 +65,7 @@ window.ECP = function() {
 		}
 	};
 
-	
+
 	this.signString = (certificate, data, toBase64 = true) => {
 		return new Promise(async (resolve, reject) => {
 			const signer = await createSigner();
@@ -86,7 +87,7 @@ window.ECP = function() {
 		});
 	};
 
-	
+
 	this.signFile = (certificate, file) => {
 		return new Promise((resolve) => {
 			const reader = new FileReader();
@@ -100,7 +101,7 @@ window.ECP = function() {
 		});
 	};
 
-	
+
 	this.signFileList = (certificate, fileList) => {
 		const promises = Array.from(fileList).map((file) => {
 			return this.signFile(certificate, file);
@@ -109,7 +110,7 @@ window.ECP = function() {
 		return Promise.all(promises);
 	};
 
-	
+
 	this.verify = (data, sign, toBase64 = false) => {
 		return new Promise(async (resolve) => {
 			const signedData = await createSignedData();
@@ -128,9 +129,7 @@ window.ECP = function() {
 		});
 	};
 
-	/**
-	 * Get installed CSP version
-	 */
+
 	this.checkCSP = () => {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -149,7 +148,7 @@ window.ECP = function() {
 		});
 	};
 
-	
+
 	async function check() {
 		try {
 			await createStore();
@@ -159,34 +158,34 @@ window.ECP = function() {
 		}
 	}
 
-	
+
 	async function createStore() {
 		return await crypto.CreateObjectAsync('CAdESCOM.Store');
 	}
 
-	
+
 	async function createSigner() {
 		return await crypto.CreateObjectAsync('CAdESCOM.CPSigner');
 	}
 
-	
+
 	async function createSignedData() {
 		return await crypto.CreateObjectAsync('CAdESCOM.CadesSignedData');
 	}
 
-	
+
 	async function extractSubjectName(certificate) {
 		var subject = await certificate.SubjectName;
 		return parseDN(subject);
 	}
 
-	
+
 	async function extractIssuerName(certificate) {
 		var issuer = await certificate.IssuerName;
 		return parseDN(issuer);
 	}
 
-	
+
 	async function parseCertificate(certificate) {
 		const isValid = await certificate.IsValid();
 
@@ -204,7 +203,7 @@ window.ECP = function() {
 		}
 	}
 
-	
+
 	async function signInfo(signedData) {
 		const signers = await signedData.Signers;
 		const count = await signers.Count;
@@ -226,7 +225,7 @@ window.ECP = function() {
 		return signs;
 	}
 
-	
+
 	function parseDN(dn) {
 		const tags = {
 			'CN': 'name',
@@ -263,7 +262,7 @@ window.ECP = function() {
 		return fields;
 	}
 
-	
+
 	function log(...args) {
 		if (VERBOSE) {
 			console.log(...args);
@@ -271,9 +270,7 @@ window.ECP = function() {
 	}
 }
 
-/**
- * String.matchAll polyfill
- */
+
 if (!String.prototype.matchAll) {
 	String.prototype.matchAll = function*(regex) {
 		function ensureFlag(flags, flag) {
